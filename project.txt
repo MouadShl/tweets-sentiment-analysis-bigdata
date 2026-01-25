@@ -1,0 +1,121 @@
+Person 1 — Data Ingestion + Orchestration (Kafka / Airflow)
+
+Goal: “Data enters the system continuously”
+
+Reddit collector (PRAW streaming) → produces messages
+
+Kafka topics (e.g., reddit_comments, reddit_posts, reddit_edges)
+
+Airflow DAG to start/monitor collectors + streaming jobs (simple DAG is enough) 
+
+document(4)
+
+
+Outputs to share with team:
+
+Kafka message schema (JSON)
+
+A short README: how to run collector + Kafka
+:joy:
+Click to react
+:thumbsup:
+Click to react
+:city_sunset:
+Click to react
+Add Reaction
+Reply
+Forward
+More
+[21:30]Saturday, 24 January 2026 at 21:30
+---------------------------
+[21:31]Saturday, 24 January 2026 at 21:31
+Person 2 — Streaming ETL + Storage (Spark Structured Streaming + MongoDB)
+
+Goal: “Data is cleaned and stored + rolling metrics”
+
+Spark Streaming from Kafka → parse JSON → clean text → enrich columns
+
+Write to MongoDB collections (raw + processed + aggregates) 
+
+
+Compute rolling aggregates per window (ex: 5 min): volume, top subreddits, top authors, avg score, etc.
+Outputs to share:
+
+MongoDB schema/collections
+
+Sample queries + indexes
+
+“Gold tables” / aggregate docs for dashboard (edited)Saturday, 24 January 2026 at 21:31
+:joy:
+Click to react
+:thumbsup:
+Click to react
+:city_sunset:
+Click to react
+Add Reaction
+Reply
+Forward
+More
+[21:31]Saturday, 24 January 2026 at 21:31
+-------------------------------
+[21:31]Saturday, 24 January 2026 at 21:31
+Person 3 — NLP / ML (Topic Modeling + Sentiment Model Training)
+
+Goal: “Working NLP results + evaluation”
+
+Topic modeling: baseline LDA or BERTopic (choose what you can run fast)
+
+Sentiment:
+
+Train your own model (fast option: TF‑IDF + Logistic Regression / Linear SVM)
+
+Compare with VADER/TextBlob as baseline 
+
+Provide metrics (accuracy/F1) + confusion matrix + example predictions
+Outputs to share:
+
+A model/ folder with saved model (joblib/pickle)
+
+Inference function that Spark/Dashboard can call
+
+Short “Model Card” (data, labels, metrics, limits)
+:joy:
+Click to react
+:thumbsup:
+Click to react
+:city_sunset:
+Click to react
+Add Reaction
+Reply
+Forward
+More
+[21:31]Saturday, 24 January 2026 at 21:31
+-------------------------------
+[21:32]Saturday, 24 January 2026 at 21:32
+Person 4 — Network Analysis + Dashboard + Presentation Lead
+
+Goal: “Everything visible and explainable”
+
+Build interaction edges: replies/mentions (user A → user B)
+
+Graph analytics:
+
+centrality (degree/betweenness/eigenvector)
+
+community detection (Louvain / Leiden) 
+
+Dashboard (Streamlit or PowerBI as suggested) with:
+
+time trends, engagement metrics, sentiment distribution
+
+dominant topics
+
+network graph visualization (static snapshot + refresh) 
+
+Own the final slide deck structure + visuals
+
+Outputs to share:
+
+dashboard/ runnable app
+
+network figures + screenshots for report/slides
