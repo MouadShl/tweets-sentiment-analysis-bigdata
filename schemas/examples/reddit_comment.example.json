@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "source": "reddit_public_json",
+  "event_type": "comment",
+  "ingested_at": "2026-01-26T00:05:12.345678+00:00",
+  "id": "9wxyz0",
+  "fullname": "t1_9wxyz0",
+  "subreddit": "worldnews",
+  "subreddit_id": "t5_2qh13",
+  "author": "another_user",
+  "created_utc": 1769385507,
+  "body": "Example comment body text.",
+  "permalink": "/r/worldnews/comments/1abcde/example_post_title/xyz123/",
+  "link_id": "t3_1abcde",
+  "parent_id": "t3_1abcde",
+  "score": 42
+}
+

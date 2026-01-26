@@ -1,0 +1,2 @@
+"""Reddit -> Kafka collector package."""
+

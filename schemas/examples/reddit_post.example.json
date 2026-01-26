@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "source": "reddit_public_json",
+  "event_type": "post",
+  "ingested_at": "2026-01-26T00:05:12.345678+00:00",
+  "id": "1abcde",
+  "fullname": "t3_1abcde",
+  "subreddit": "worldnews",
+  "subreddit_id": "t5_2qh13",
+  "author": "some_user",
+  "created_utc": 1769384374,
+  "title": "Example post title",
+  "selftext": "Example post body text (may be empty).",
+  "url": "https://www.reddit.com/r/worldnews/comments/1abcde/example_post_title/",
+  "permalink": "/r/worldnews/comments/1abcde/example_post_title/",
+  "num_comments": 1234,
+  "score": 5678,
+  "over_18": false,
+  "is_self": true
+}
+
