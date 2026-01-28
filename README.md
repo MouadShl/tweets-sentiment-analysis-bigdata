@@ -60,3 +60,15 @@ JSON schemas are in:
 - `schemas/reddit_posts.schema.json`
 - `schemas/reddit_comments.schema.json`
 
+
+
+---
+
+## Person 2 — Streaming ETL + Storage (Spark + MongoDB)
+
+A starter Spark Structured Streaming job is included to:
+- consume Kafka topics (`reddit_posts`, `reddit_comments`)
+- clean/enrich text
+- write to MongoDB collections (`raw_reddit`, `processed_reddit`, `aggregates_5m`)
+
+See: `spark/README.md` and `mongodb/README.md`.
