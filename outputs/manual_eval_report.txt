@@ -1,0 +1,48 @@
+
+==== YOUR ML MODEL ====
+              precision    recall  f1-score   support
+
+         neg     0.7391    0.9714    0.8395        35
+         neu     0.9545    0.7500    0.8400        28
+         pos     0.9375    0.8108    0.8696        37
+
+    accuracy                         0.8500       100
+   macro avg     0.8771    0.8441    0.8497       100
+weighted avg     0.8728    0.8500    0.8508       100
+
+Confusion matrix (neg, neu, pos):
+[[34  1  0]
+ [ 5 21  2]
+ [ 7  0 30]]
+
+==== VADER ====
+              precision    recall  f1-score   support
+
+         neg     1.0000    1.0000    1.0000        35
+         neu     1.0000    1.0000    1.0000        28
+         pos     1.0000    1.0000    1.0000        37
+
+    accuracy                         1.0000       100
+   macro avg     1.0000    1.0000    1.0000       100
+weighted avg     1.0000    1.0000    1.0000       100
+
+Confusion matrix (neg, neu, pos):
+[[35  0  0]
+ [ 0 28  0]
+ [ 0  0 37]]
+
+==== TEXTBLOB ====
+              precision    recall  f1-score   support
+
+         neg     0.3478    0.2286    0.2759        35
+         neu     0.4500    0.6429    0.5294        28
+         pos     0.4865    0.4865    0.4865        37
+
+    accuracy                         0.4400       100
+   macro avg     0.4281    0.4526    0.4306       100
+weighted avg     0.4277    0.4400    0.4248       100
+
+Confusion matrix (neg, neu, pos):
+[[ 8 15 12]
+ [ 3 18  7]
+ [12  7 18]]
