@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "reddit_posts",
+  "type": "object",
+  "required": ["schema_version", "source", "event_type", "ingested_at", "id", "subreddit", "created_utc", "title"],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "source": { "type": "string" },
+    "event_type": { "type": "string", "const": "post" },
+    "ingested_at": { "type": "string" },
+    "id": { "type": ["string", "null"] },
+    "fullname": { "type": ["string", "null"] },
+    "subreddit": { "type": ["string", "null"] },
+    "subreddit_id": { "type": ["string", "null"] },
+    "author": { "type": ["string", "null"] },
+    "created_utc": { "type": ["number", "integer", "null"] },
+    "title": { "type": ["string", "null"] },
+    "selftext": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "permalink": { "type": ["string", "null"] },
+    "num_comments": { "type": ["integer", "null"] },
+    "score": { "type": ["integer", "null"] },
+    "over_18": { "type": ["boolean", "null"] },
+    "is_self": { "type": ["boolean", "null"] }
+  },
+  "additionalProperties": true
+}
+

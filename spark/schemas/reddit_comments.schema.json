@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "reddit_comments",
+  "type": "object",
+  "required": ["schema_version", "source", "event_type", "ingested_at", "id", "subreddit", "created_utc", "body"],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "source": { "type": "string" },
+    "event_type": { "type": "string", "const": "comment" },
+    "ingested_at": { "type": "string" },
+    "id": { "type": ["string", "null"] },
+    "fullname": { "type": ["string", "null"] },
+    "subreddit": { "type": ["string", "null"] },
+    "subreddit_id": { "type": ["string", "null"] },
+    "author": { "type": ["string", "null"] },
+    "created_utc": { "type": ["number", "integer", "null"] },
+    "body": { "type": ["string", "null"] },
+    "permalink": { "type": ["string", "null"] },
+    "link_id": { "type": ["string", "null"] },
+    "parent_id": { "type": ["string", "null"] },
+    "score": { "type": ["integer", "null"] }
+  },
+  "additionalProperties": true
+}
+
