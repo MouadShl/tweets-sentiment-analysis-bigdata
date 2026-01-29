@@ -8,6 +8,14 @@ from pyspark.sql.types import (
     StructType, StructField, StringType, LongType, IntegerType, BooleanType
 )
 
+try:
+    # Optional: load local .env (ignored by git) for convenience
+    from dotenv import load_dotenv  # type: ignore
+
+    load_dotenv()
+except Exception:
+    pass
+
 """Person 2 — Streaming ETL + Storage (Spark Structured Streaming + MongoDB)
 
 - Read Kafka topics: reddit_posts, reddit_comments
