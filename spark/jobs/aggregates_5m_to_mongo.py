@@ -2,7 +2,15 @@ import os
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, window, count, avg
 
-KAFKA_BOOTSTRAP = os.getenv("KAFKA_BOOTSTRAP", "localhost:29092")
+try:
+    # Optional: load local .env (ignored by git) for convenience
+    from dotenv import load_dotenv  # type: ignore
+
+    load_dotenv()
+except Exception:
+    pass
+
+KAFKA_BOOTSTRAP = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:29092")
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 MONGO_DB = os.getenv("MONGO_DB", "reddit_stream")
 
@@ -55,7 +63,7 @@ query = (
     metrics_5m.writeStream
     .outputMode("append")
     .foreachBatch(write_mongo)
-    .option("checkpointLocation", "/tmp/chk_agg_5m_volume")
+    .option("checkpointLocation", os.getenv("CHECKPOINT_DIR", "checkpoints") + "/agg_5m_volume")
     .start()
 )
 

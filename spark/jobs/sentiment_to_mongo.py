@@ -1,11 +1,20 @@
+import os
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from pyspark.sql.types import DoubleType, StringType
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-MONGO_URI = "mongodb://localhost:27017"
-MONGO_DB = "reddit_stream"
+try:
+    # Optional: load local .env (ignored by git) for convenience
+    from dotenv import load_dotenv  # type: ignore
+
+    load_dotenv()
+except Exception:
+    pass
+
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+MONGO_DB = os.getenv("MONGO_DB", "reddit_stream")
 SRC_COLLECTION = "processed_reddit"
 DST_COLLECTION = "scored_reddit"
 
