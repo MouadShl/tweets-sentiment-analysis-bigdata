@@ -30,3 +30,11 @@ build/
 checkpoints/
 state/
 data/
+
+.env
+__pycache__/
+*.pyc
+.venv/
+.vscode/
+outputs/
+spark/checkpoints/
