@@ -1,2 +1,6 @@
-requests==2.32.3
-kafka-python==2.0.2
+joblib
+scikit-learn
+pymongo
+dnspython
+python-dotenv
+certifi

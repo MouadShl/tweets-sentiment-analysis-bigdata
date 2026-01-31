@@ -19,6 +19,27 @@ docker compose up -d --build
 
 MongoDB will be available at `mongodb://localhost:27017`.
 
+### Use MongoDB Atlas (online) instead of local Mongo
+
+- **Important**: don’t paste your real Atlas password/URI into git-tracked files. Put it in your shell env or a local `.env` file (already ignored by `.gitignore`).
+- In Atlas, make sure:
+  - **Network Access** allows your IP (or `0.0.0.0/0` temporarily for quick testing)
+  - Your DB user exists and has the right permissions
+
+Example (replace with your real values):
+
+```bash
+export MONGO_URI='mongodb+srv://<user>:<password>@<cluster-host>/<db>?retryWrites=true&w=majority&appName=Cluster0'
+export MONGO_DB=reddit_stream
+```
+
+Quick connectivity check (loads `.env` automatically if you created one):
+
+```bash
+python3 -m pip install -r requirements.txt
+python3 scripts/mongo_ping.py
+```
+
 ## 2) Run the Spark streaming job (local)
 
 ### Prereqs

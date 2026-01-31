@@ -5,6 +5,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    restart: unless-stopped
 
   kafka:
     image: confluentinc/cp-kafka:7.6.0
@@ -17,13 +18,11 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 
-      # Internal (docker network) + External (host)
       KAFKA_LISTENERS: PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
 
-      # Dev-friendly single broker
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
@@ -31,8 +30,9 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 >/dev/null 2>&1"]
       interval: 10s
-      timeout: 5s
-      retries: 12
+      timeout: 10s
+      retries: 30
+    restart: unless-stopped
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -45,14 +45,16 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    restart: unless-stopped
 
   mongodb:
     image: mongo:7
-    container_name: tsa-mongodb
+    container_name: tsa-mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    restart: unless-stopped
 
   collector:
     build:
@@ -66,12 +68,84 @@ services:
       TOPIC_POSTS: reddit_posts
       TOPIC_COMMENTS: reddit_comments
       SUBREDDITS: worldnews,news
-      POLL_INTERVAL_SECONDS: 10
+      POLL_INTERVAL_SECONDS: 60
       USER_AGENT: "tsa-reddit-collector/1.0 (class project)"
       STATE_DIR: /state
       LOG_LEVEL: INFO
     volumes:
       - collector_state:/state
+    restart: unless-stopped
+
+  sentiment-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tsa-sentiment-worker
+    command: python scripts/mongo_sentiment_worker.py
+    env_file: .env
+    environment:
+      # Use MONGO_URI from repo `.env` if present (e.g. Atlas), otherwise local docker Mongo.
+      MONGO_URI: ${MONGO_URI:-mongodb://mongodb:27017}
+      MONGO_DB: ${MONGO_DB:-reddit_stream}
+      # The worker reads `MONGO_COLLECTIONS` (comma-separated).
+      # Our Spark job writes into `processed_reddit` / `raw_reddit` by default.
+      MONGO_COLLECTIONS: processed_reddit
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  spark:
+    image: spark:3.5.7-python3
+    container_name: tsa-spark
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+    volumes:
+      - ./spark:/opt/spark-app
+    working_dir: /opt/spark-app
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      MONGO_URI: ${MONGO_URI:-mongodb://mongodb:27017}
+      MONGO_DB: ${MONGO_DB:-reddit_stream}
+      PYSPARK_PYTHON: python3
+    command: ["sleep", "infinity"]
+    restart: unless-stopped
+
+  # Runs the Spark Structured Streaming job continuously (Kafka -> MongoDB).
+  # This is what actually "pushes data into Mongo".
+  spark-stream:
+    image: spark:3.5.7-python3
+    container_name: tsa-spark-stream
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+    volumes:
+      - ./spark:/opt/spark-app
+    working_dir: /opt/spark-app
+    env_file: .env
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      # Use MONGO_URI from repo `.env` if present (e.g. Atlas), otherwise local docker Mongo.
+      MONGO_URI: ${MONGO_URI:-mongodb://mongodb:27017}
+      MONGO_DB: ${MONGO_DB:-reddit_stream}
+      PYSPARK_PYTHON: python3
+      # Ensure Ivy cache is writable inside container
+      HOME: /tmp
+      CHECKPOINT_DIR: /opt/spark-app/checkpoints
+    command:
+      - sh
+      - -lc
+      - >
+        mkdir -p /tmp/.ivy2 /opt/spark-app/checkpoints &&
+        /opt/spark/bin/spark-submit
+        --conf spark.jars.ivy=/tmp/.ivy2
+        --packages
+        org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.7,org.mongodb.spark:mongo-spark-connector_2.12:10.4.0
+        /opt/spark-app/jobs/stream_reddit_to_mongo.py
     restart: unless-stopped
 
 volumes:

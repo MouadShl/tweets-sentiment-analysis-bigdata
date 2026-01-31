@@ -3,10 +3,7 @@
 # Environments
 .venv/
 venv/
-env/
-.env
-.env.*
-!.env.example
+
 
 # Python
 __pycache__/
@@ -33,3 +30,10 @@ build/
 checkpoints/
 state/
 data/
+
+__pycache__/
+*.pyc
+.venv/
+.vscode/
+outputs/
+spark/checkpoints/
