@@ -31,7 +31,6 @@ checkpoints/
 state/
 data/
 
-.env
 __pycache__/
 *.pyc
 .venv/

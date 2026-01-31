@@ -167,13 +167,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-import certifi
-from pymongo import MongoClient
-
-client = MongoClient(
-    MONGO_URI,
-    tls=True,
-    tlsCAFile=certifi.where(),
-    serverSelectionTimeoutMS=8000
-)
-client.admin.command("ping")

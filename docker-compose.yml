@@ -84,10 +84,12 @@ services:
     command: python scripts/mongo_sentiment_worker.py
     env_file: .env
     environment:
-      MONGO_URI: mongodb://mongodb:27017
-      MONGO_DB: reddit_stream
-      MONGO_COLLECTION_COMMENTS: comments
-      MONGO_COLLECTION_POSTS: posts
+      # Use MONGO_URI from repo `.env` if present (e.g. Atlas), otherwise local docker Mongo.
+      MONGO_URI: ${MONGO_URI:-mongodb://mongodb:27017}
+      MONGO_DB: ${MONGO_DB:-reddit_stream}
+      # The worker reads `MONGO_COLLECTIONS` (comma-separated).
+      # Our Spark job writes into `processed_reddit` / `raw_reddit` by default.
+      MONGO_COLLECTIONS: processed_reddit
     depends_on:
       - mongodb
     restart: unless-stopped
@@ -105,10 +107,45 @@ services:
     working_dir: /opt/spark-app
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      MONGO_URI: mongodb://mongodb:27017
-      MONGO_DB: reddit_stream
+      MONGO_URI: ${MONGO_URI:-mongodb://mongodb:27017}
+      MONGO_DB: ${MONGO_DB:-reddit_stream}
       PYSPARK_PYTHON: python3
     command: ["sleep", "infinity"]
+    restart: unless-stopped
+
+  # Runs the Spark Structured Streaming job continuously (Kafka -> MongoDB).
+  # This is what actually "pushes data into Mongo".
+  spark-stream:
+    image: spark:3.5.7-python3
+    container_name: tsa-spark-stream
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+    volumes:
+      - ./spark:/opt/spark-app
+    working_dir: /opt/spark-app
+    env_file: .env
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      # Use MONGO_URI from repo `.env` if present (e.g. Atlas), otherwise local docker Mongo.
+      MONGO_URI: ${MONGO_URI:-mongodb://mongodb:27017}
+      MONGO_DB: ${MONGO_DB:-reddit_stream}
+      PYSPARK_PYTHON: python3
+      # Ensure Ivy cache is writable inside container
+      HOME: /tmp
+      CHECKPOINT_DIR: /opt/spark-app/checkpoints
+    command:
+      - sh
+      - -lc
+      - >
+        mkdir -p /tmp/.ivy2 /opt/spark-app/checkpoints &&
+        /opt/spark/bin/spark-submit
+        --conf spark.jars.ivy=/tmp/.ivy2
+        --packages
+        org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.7,org.mongodb.spark:mongo-spark-connector_2.12:10.4.0
+        /opt/spark-app/jobs/stream_reddit_to_mongo.py
     restart: unless-stopped
 
 volumes:
