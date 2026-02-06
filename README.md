@@ -43,7 +43,7 @@ Sentiment & Topic Insights
 
 ## 🧩 Team Contributions
 
-### 👤 Person 1 — Data Ingestion & Streaming Backbone
+### 👤 Mohamed Amine Azirgui — Data Ingestion & Streaming Backbone
 
 **Responsibilities**
 - Scraped Reddit using public JSON endpoints (no API keys)
@@ -61,7 +61,7 @@ Sentiment & Topic Insights
 
 ---
 
-### 👤 Person 2 — Streaming ETL & Storage (Spark + MongoDB)
+### 👤 Youssef Bouzit — Streaming ETL & Storage (Spark + MongoDB)
 
 **Responsibilities**
 - Implemented Spark Structured Streaming jobs consuming Kafka topics
@@ -78,7 +78,7 @@ Sentiment & Topic Insights
 
 ---
 
-### 👤 Person 3 — Sentiment Analysis & NLP Modeling
+### 👤 Mouad Souhal — Sentiment Analysis & NLP Modeling
 
 **Responsibilities**
 - Built an automated NLP pipeline for posts and comments
@@ -95,7 +95,7 @@ Sentiment & Topic Insights
 
 ---
 
-### 👤 Person 4 — Topic Modeling, Insights & Reporting
+### 👤 Abdoul Amine Kabirou Amusa — Topic Modeling, Insights & Reporting
 
 **Responsibilities**
 - Implemented topic extraction to explain sentiment context
