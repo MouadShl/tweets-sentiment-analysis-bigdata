@@ -55,9 +55,9 @@ Sentiment & Topic Insights
 - Persisted ingestion state to avoid duplicate data on restarts
 
 **Technologies**
-- Python
-- Apache Kafka
-- Docker & Docker Compose
+- Python  
+- Apache Kafka  
+- Docker & Docker Compose  
 
 ---
 
@@ -68,34 +68,47 @@ Sentiment & Topic Insights
 - Cleaned, normalized, and enriched text streams
 - Persisted raw and processed data into MongoDB
 - Built time-based aggregations
-- Solved Windows / Hadoop issues by running Spark in Linux containers
+- Solved Windows/Hadoop compatibility issues by running Spark in Linux containers
 
 **Technologies**
-- Apache Spark (Structured Streaming)
-- Apache Kafka
-- MongoDB
-- Docker
+- Apache Spark (Structured Streaming)  
+- Apache Kafka  
+- MongoDB  
+- Docker  
 
 ---
 
-### 👤 Person 3 — Sentiment Analysis & NLP Insights
+### 👤 Person 3 — Sentiment Analysis & NLP Modeling
 
 **Responsibilities**
 - Built an automated NLP pipeline for posts and comments
-- Classified sentiment into:
-  - Positive
-  - Neutral
-  - Negative
+- Classified sentiment into **positive / neutral / negative**
 - Stored sentiment labels, confidence scores, timestamps, and model versions in MongoDB
 - Applied text preprocessing and normalization
-- Extracted discussion topics using **TF-IDF + NMF**
-- Generated interpretable insights from real streaming data
+- Evaluated model performance and ensured reproducibility
 
 **Technologies**
-- Python
-- scikit-learn
-- NLP (TF-IDF, NMF)
-- MongoDB
+- Python  
+- scikit-learn  
+- NLP (TF-IDF, Bag-of-Words)  
+- MongoDB  
+
+---
+
+### 👤 Person 4 — Topic Modeling, Insights & Reporting
+
+**Responsibilities**
+- Implemented topic extraction to explain sentiment context
+- Applied **TF-IDF + NMF** for unsupervised topic modeling
+- Identified dominant discussion themes per subreddit
+- Analyzed sentiment trends and topic frequency over time
+- Produced interpretable insights and summaries for reporting and presentation
+
+**Technologies**
+- Python  
+- scikit-learn  
+- NLP (TF-IDF, NMF)  
+- Data Analysis & Visualization  
 
 ---
 
