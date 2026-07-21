@@ -30,22 +30,41 @@ Every service is orchestrated through **Docker Compose**, so the entire stack sp
 
 ---
 
+## 🛠️ Tech Stack at a Glance
+
+| Layer | Technology | Purpose |
+|---|---|---|
+| 📥 Ingestion | Python | Scrapes Reddit's public JSON endpoints |
+| 📨 Messaging | Apache Kafka | Streams raw posts & comments in real time |
+| ⚡ Processing | Apache Spark (Structured Streaming) | Cleans, normalizes & enriches data on the fly |
+| 🍃 Storage | MongoDB | Persists raw + processed documents & analytics |
+| 🧠 NLP | scikit-learn (TF-IDF, Bag-of-Words) | Sentiment classification |
+| 🔍 Topic Modeling | scikit-learn (TF-IDF + NMF) | Unsupervised theme extraction |
+| 🐳 Orchestration | Docker & Docker Compose | One-command, reproducible deployment |
+
+---
+
 ## 🧠 Global Architecture
 
-```
-Reddit (Public JSON Endpoints)
-            ↓
-     Collector (Python)
-            ↓
-       Kafka Topics
- (reddit_posts / reddit_comments)
-            ↓
- Spark Structured Streaming
-            ↓
-          MongoDB
-   (posts, comments, analytics)
-            ↓
-   Sentiment & Topic Insights
+```mermaid
+flowchart TD
+    A["🌐 Reddit<br/>Public JSON Endpoints"] --> B["🐍 Collector<br/>Python"]
+    B --> C["📨 Kafka Topics<br/>reddit_posts / reddit_comments"]
+    C --> D["⚡ Spark Structured Streaming<br/>Clean · Normalize · Enrich"]
+    D --> E[("🍃 MongoDB<br/>posts · comments · analytics")]
+    E --> F["🧠 NLP Sentiment Engine<br/>positive / neutral / negative"]
+    E --> G["🔍 Topic Modeling<br/>TF-IDF + NMF"]
+    F --> H["📊 Insights & Dashboards"]
+    G --> H
+
+    style A fill:#FF4500,color:#fff
+    style B fill:#3776AB,color:#fff
+    style C fill:#000000,color:#fff
+    style D fill:#E25A1C,color:#fff
+    style E fill:#13AA52,color:#fff
+    style F fill:#6C4AB6,color:#fff
+    style G fill:#6C4AB6,color:#fff
+    style H fill:#2E7D32,color:#fff
 ```
 
 ---
