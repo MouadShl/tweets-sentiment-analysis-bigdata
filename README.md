@@ -1,43 +1,52 @@
-# 🚀 Real-Time Social Media Sentiment Analysis (Big Data & NLP)
+# 🚀 PulseStream — Real-Time Social Media Sentiment Intelligence
 
-![Apache Kafka](https://img.shields.io/badge/Kafka-Streaming-black?logo=apachekafka)
-![Apache Spark](https://img.shields.io/badge/Spark-Structured%20Streaming-orange?logo=apachespark)
-![MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-green?logo=mongodb)
-![Docker](https://img.shields.io/badge/Docker-Containerized-blue?logo=docker)
-![Python](https://img.shields.io/badge/Python-NLP-yellow?logo=python)
+<p align="center">
+  <em>A production-grade Big Data pipeline turning raw Reddit chatter into live sentiment and topic insights.</em>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Kafka-Streaming-black?logo=apachekafka" />
+  <img src="https://img.shields.io/badge/Spark-Structured%20Streaming-orange?logo=apachespark" />
+  <img src="https://img.shields.io/badge/MongoDB-NoSQL-green?logo=mongodb" />
+  <img src="https://img.shields.io/badge/Docker-Containerized-blue?logo=docker" />
+  <img src="https://img.shields.io/badge/Python-NLP-yellow?logo=python" />
+</p>
 
 ---
 
 ## 📌 Project Overview
 
-This project implements a **fully containerized, end-to-end Big Data pipeline** for **real-time sentiment analysis of social media data (Reddit)**.
+PulseStream is a **fully containerized, end-to-end Big Data pipeline** built to capture the pulse of online conversation in real time. Using Reddit as the data source, the system listens, processes, understands, and explains what people are talking about - and how they feel about it - as it happens.
 
-The system covers:
-- Real-time data ingestion
-- Stream processing
-- Persistent storage
-- NLP-based sentiment classification
-- Topic extraction and insights
+The pipeline covers the full lifecycle of a modern streaming data product:
 
-All components are orchestrated using **Docker Compose**, ensuring **reproducibility and portability across machines**.
+- **Real-time ingestion** from live social data
+- **Stream processing** at scale
+- **Persistent, queryable storage**
+- **NLP-driven sentiment classification**
+- **Unsupervised topic extraction** for context and insight
+
+Every service is orchestrated through **Docker Compose**, so the entire stack spins up identically on any machine - no manual setup, no dependency headaches, no "works on my machine."
 
 ---
 
 ## 🧠 Global Architecture
 
+```
 Reddit (Public JSON Endpoints)
-↓
-Collector (Python)
-↓
-Kafka Topics
-(reddit_posts / reddit_comments)
-↓
-Spark Structured Streaming
-↓
-MongoDB
-(posts, comments, analytics)
-↓
-Sentiment & Topic Insights
+            ↓
+     Collector (Python)
+            ↓
+       Kafka Topics
+ (reddit_posts / reddit_comments)
+            ↓
+ Spark Structured Streaming
+            ↓
+          MongoDB
+   (posts, comments, analytics)
+            ↓
+   Sentiment & Topic Insights
+```
 
 ---
 
@@ -46,81 +55,63 @@ Sentiment & Topic Insights
 ### 👤 Mohamed Amine Azirgui — Data Ingestion & Streaming Backbone
 
 **Responsibilities**
-- Scraped Reddit using public JSON endpoints (no API keys)
-- Produced structured JSON messages into Kafka topics:
-  - `reddit_posts`
-  - `reddit_comments`
-- Designed a Docker-first ingestion stack
-- Implemented Kafka health checks to guarantee safe startup order
-- Persisted ingestion state to avoid duplicate data on restarts
+- Scraped Reddit using public JSON endpoints (no API keys required)
+- Produced structured JSON messages into two Kafka topics: `reddit_posts` and `reddit_comments`
+- Designed a Docker-first ingestion stack for reliable, repeatable deployment
+- Implemented Kafka health checks to guarantee safe service startup order
+- Persisted ingestion state to prevent duplicate data on restarts
 
-**Technologies**
-- Python  
-- Apache Kafka  
-- Docker & Docker Compose  
+**Technologies:** Python · Apache Kafka · Docker & Docker Compose
 
 ---
 
 ### 👤 Youssef Bouzit — Streaming ETL & Storage (Spark + MongoDB)
 
 **Responsibilities**
-- Implemented Spark Structured Streaming jobs consuming Kafka topics
-- Cleaned, normalized, and enriched text streams
-- Persisted raw and processed data into MongoDB
-- Built time-based aggregations
-- Solved Windows/Hadoop compatibility issues by running Spark in Linux containers
+- Implemented Spark Structured Streaming jobs to consume Kafka topics in real time
+- Cleaned, normalized, and enriched raw text streams
+- Persisted both raw and processed data into MongoDB
+- Built time-based aggregations for downstream analytics
+- Resolved Windows/Hadoop compatibility issues by running Spark inside Linux containers
 
-**Technologies**
-- Apache Spark (Structured Streaming)  
-- Apache Kafka  
-- MongoDB  
-- Docker  
+**Technologies:** Apache Spark (Structured Streaming) · Apache Kafka · MongoDB · Docker
 
 ---
 
 ### 👤 Mouad Souhal — Sentiment Analysis & NLP Modeling
 
 **Responsibilities**
-- Built an automated NLP pipeline for posts and comments
-- Classified sentiment into **positive / neutral / negative**
-- Stored sentiment labels, confidence scores, timestamps, and model versions in MongoDB
-- Applied text preprocessing and normalization
-- Evaluated model performance and ensured reproducibility
+- Built an automated NLP pipeline to classify posts and comments as **positive**, **neutral**, or **negative**
+- Stored sentiment labels, confidence scores, timestamps, and model versions in MongoDB for full traceability
+- Applied text preprocessing and normalization to improve model reliability
+- Evaluated model performance and ensured reproducibility across runs
 
-**Technologies**
-- Python  
-- scikit-learn  
-- NLP (TF-IDF, Bag-of-Words)  
-- MongoDB  
+**Technologies:** Python · scikit-learn · NLP (TF-IDF, Bag-of-Words) · MongoDB
 
 ---
 
 ### 👤 Abdoul Amine Kabirou Amusa — Topic Modeling, Insights & Reporting
 
 **Responsibilities**
-- Implemented topic extraction to explain sentiment context
+- Implemented topic extraction to add context to sentiment results
 - Applied **TF-IDF + NMF** for unsupervised topic modeling
 - Identified dominant discussion themes per subreddit
 - Analyzed sentiment trends and topic frequency over time
 - Produced interpretable insights and summaries for reporting and presentation
 
-**Technologies**
-- Python  
-- scikit-learn  
-- NLP (TF-IDF, NMF)  
-- Data Analysis & Visualization  
+**Technologies:** Python · scikit-learn · NLP (TF-IDF, NMF) · Data Analysis & Visualization
 
 ---
 
 ## 🧪 Validation & Debugging
 
-The pipeline was validated with **real evidence**, not just running containers:
+The pipeline wasn't just "run and hope" - it was validated end-to-end with concrete evidence:
 
-- Kafka topics manually listed and consumed from earliest offsets
-- JSON message schemas verified
-- MongoDB queried from inside the container using `mongosh`
-- Document counts and collections validated
-- Spark stabilized using Docker-based Linux execution
+- Kafka topics manually listed and consumed from earliest offsets to confirm message flow
+- JSON message schemas verified for structural correctness
+- MongoDB queried directly inside the container using `mongosh`
+- Document counts and collections cross-checked against expected volumes
+- Spark stabilized by running exclusively in Docker-based Linux execution
 
 ---
 
@@ -133,3 +124,6 @@ The pipeline was validated with **real evidence**, not just running containers:
 ### Run the full pipeline
 ```bash
 docker compose up -d --build
+```
+
+That's it - the collector, Kafka, Spark, and MongoDB all come online together, and sentiment insights start flowing shortly after.
