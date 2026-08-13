@@ -1,4 +1,4 @@
-# 🚀 PulseStream — Real-Time Social Media Sentiment Intelligence
+# 🚀 PulseStream - Real-Time Social Media Sentiment Intelligence
 
 <p align="center">
   <em>A production-grade Big Data pipeline turning raw Reddit chatter into live sentiment and topic insights.</em>
